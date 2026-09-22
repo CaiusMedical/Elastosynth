@@ -55,7 +55,12 @@ function [parameter_table] = GenerateRFOneByOne(parameter_table, boundary_condit
 
         [X,Y] = meshgrid(linspace(-L/2,L/2,MetaDataFEM.FEM_resolution(1)+1),linspace(0,D,MetaDataFEM.FEM_resolution(2)+1)+0.03);
         I = ones(220,200);
-    
+
+        % Reproducible scatterer field / out-of-plane motion for this phantom
+        if ismember('phantom_seed', parameter_table.Properties.VariableNames)
+            SetElastosynthSeed(parameter_table.phantom_seed(i), 2);
+        end
+
         [phantom_positions, phantom_amplitudes] = ImageToScatterers(I, D,L, Z, imageopts.n_scatterers);
         
         phantom = Phantom(phantom_positions, phantom_amplitudes);

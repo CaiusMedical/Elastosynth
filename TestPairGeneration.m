@@ -3,14 +3,10 @@ clear all
 clc
 
 speed_factor = 100;
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
-addpath("Scratch/")
 
-if (~ispc)
-    addpath("FIELD II Linux/")
-else
-    addpath("FIELD II Windows/")
-end
+% FIELD II path is set by ElastosynthSetup()
 
 
 field_init();
@@ -64,7 +60,7 @@ scatter(phantom_positions(:,3), phantom_positions(:,1), 8, phantom_amplitudes,'f
 
 phantom = Phantom(phantom_positions, phantom_amplitudes);
 
-imageopts = ImageOpts(256, 40/1000);
+imageopts = ImageOpts(256, 40/1000, D, L, Z, 114000, speed_factor);
 imageopts.decimation_factor = 2;
 
 coordinates = readmatrix("G:\My Drive\Engineering\Active Projects\ElastoSynth\Displacement Data/Coordinates.csv")./1000;

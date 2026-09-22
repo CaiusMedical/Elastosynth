@@ -3,11 +3,9 @@
 %export LD_PRELOAD=/lib/x86_64-linux-gnu/libstdc++.so.6 matlab
 
 clc
-
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FEM Interface Windows/")
 close all
 clear all
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
 ConfigureFEM();
 
@@ -57,8 +55,6 @@ result = RunFiniteElementAnalysis(analysis_options,material,boundary_conditions,
 
 figure
 subplot(2,2,1)
-imshofigure
-subplot(2,2,1)
 imshow(result.axial_disp,[])
 colorbar
 title("Axial Displacement", "FontSize",20)
@@ -77,8 +73,3 @@ subplot(2,2,4)
 imshow(result.lateral_strain,[])
 colorbar
 title("Lateral Strain", "FontSize",20)
-w(result.axial_disp,[])
-colorbar
-title("Axial Displacement", "FontSize",20)
-
-

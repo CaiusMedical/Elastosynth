@@ -1,8 +1,7 @@
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FEM Interface Windows/")
 close all
 clear all
 clc
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
 
 %% Make a well integrated phantom with a different poisson's ratio compared to the background
@@ -179,11 +178,7 @@ save("poissons_phantom.mat", 'phantom')
 
 speed_factor = 100;
 
-if (~ispc)
-    addpath("FIELD II Linux/")
-else
-    addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FIELD II Windows/")
-end
+% FIELD II path is set by ElastosynthSetup()
 
 field_init();
 
@@ -227,9 +222,9 @@ phantom = Phantom(phantom_positions, phantom_amplitudes);
 
 imageopts = ImageOpts(128, 40/1000, 40/1000, 40/1000, 10/1000, 10e5,100);
 imageopts.decimation_factor = 2;
-iamgeopts.axial_FOV = 40/1000;
+imageopts.axial_FOV = 40/1000;
 imageopts.lateral_FOV = 40/1000;
-iamgeopts.slice_thickness = 10/1000;
+imageopts.slice_thickness = 10/1000;
 
 dispx = interp2(X,Y,axial_disp,phantom_positions(:,1),phantom_positions(:,3));
 dispy = interp2(X,Y,lateral_disp,phantom_positions(:,1),phantom_positions(:,3));
@@ -259,7 +254,6 @@ Frame2 = Frame2 ./ max(Frame2(:));
 
 %%
 
-addpath("C:\Users\MattC\OneDrive\Masters\Displacement Estimator Project\GLUE")
 
 params.probe.a_t = 1;
 params.probe.fc = 5;

@@ -1,15 +1,14 @@
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FEM Interface Windows/")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FIELD II Windows")
 close all
 clear all
 clc
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
 %%
 
 resolution = [256 256];
 
-parameter_table = GeneratePhantomParameterTable(50,[1,2],[5,1,10],[0,0],0,0,0,1);
+seed = 1;   % master seed: every phantom i gets seed+i-1, see SetElastosynthSeed
+parameter_table = GeneratePhantomParameterTable(50,[1,2],[5,1,10],[0,0],0,0,0,1, seed);
 size_params = [80,10];
 YM_params = [1.5, 5,3000];
 het_params = [1, 5, 1000];
@@ -51,8 +50,7 @@ size(MetaDataFEM)
 for i = 1:size(MetaDataFEM,2)
 
     transducer_no = randi(3)
-    parameter_table.transducer_file(i) = strcat("C:\Users\MattC\OneDrive\Elastosynth\Simulator\Transducers/",...
-       transducer_list(transducer_no));
+    parameter_table.transducer_file(i) = fullfile(root, "Transducers", transducer_list(transducer_no));
 
     load(parameter_table.transducer_file(i));
 
@@ -67,6 +65,7 @@ for i = 1:size(MetaDataFEM,2)
 
 end
 
+if ~exist("Outputs", "dir"), mkdir("Outputs"); end
 writetable(parameter_table, "Outputs/ParameterTable.csv")
 
 %%readtable("Outputs/ParameterTable.csv")

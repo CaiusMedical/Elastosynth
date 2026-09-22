@@ -1,8 +1,17 @@
 function [parameter_table] = GeneratePhantomParameterTable(n_phantoms, inclusion_range,...
     min_pixel_params, decorrelation_params, allow_outofbounds, allow_overlap,...
-    size_dominant, plane_stress)
+    size_dominant, plane_stress, seed)
     %GENERATEPHANTOMPARAMETERTABLE Generates a Phantom Parameter Table for
     %dataset generation
+    %
+    %   seed (optional): integer master seed. When given, the table itself is
+    %   drawn from a seeded generator and every row receives its own seed
+    %   (seed, seed+1, ...) which is used by GenerateProceduralPhantom and the
+    %   RF generators, so that any single phantom of a dataset can be
+    %   regenerated on its own. Omit (or pass NaN) for unseeded generation.
+
+    if nargin < 9 || isempty(seed), seed = NaN; end
+    SetElastosynthSeed(seed, 0);
 
     % Initialize Table
     n_inclusions = randi([inclusion_range(1) inclusion_range(2)], n_phantoms,1);
@@ -23,10 +32,22 @@ function [parameter_table] = GeneratePhantomParameterTable(n_phantoms, inclusion
     %
     min_pixel_dist = min(min_pixel_params(2)*rand(n_phantoms,1) + min_pixel_params(1), min_pixel_params(3));
 
+    % Generation type: "Simple" (circular inclusions), "LTI" or "LTP" (PCA
+    % shape model). Scripts may overwrite this column.
+    generation_type = strings(n_phantoms, 1);
+    generation_type(:) = "Simple";
+
+    % Per-phantom seed (NaN when unseeded)
+    if isnan(seed)
+        phantom_seed = NaN(n_phantoms, 1);
+    else
+        phantom_seed = seed + (0:n_phantoms-1)';
+    end
+
     parameter_table = table(n_inclusions, min_pixel_dist, allow_outofbounds, allow_overlap,...
-        size_dominant, OOP_displacement, FEM_elements, transducer_file, metadata_file, output_file);
+        size_dominant, OOP_displacement, FEM_elements, generation_type, phantom_seed, ...
+        transducer_file, metadata_file, output_file);
 
     parameter_table.transducer_file(:) = "Default_Transducer.mat";
-    
-end
 
+end

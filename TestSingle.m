@@ -3,9 +3,8 @@ clear all
 clc
 
 speed_factor = 20;
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
-addpath("Scratch/")
-addpath("/home/matt/Packages_&_Software/Field_II_ver_3_30_linux/")
 field_init();
 
 transducer = Transducer;
@@ -55,7 +54,7 @@ scatter(phantom_positions(:,3), phantom_positions(:,1), 8, phantom_amplitudes,'f
 
 phantom = Phantom(phantom_positions, phantom_amplitudes);
 
-imageopts = ImageOpts(128, 40/1000);
+imageopts = ImageOpts(128, 40/1000, D, L, Z, 100000, speed_factor);
 
 n_factors = 2;
 max_factor = 2;

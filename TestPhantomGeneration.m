@@ -1,8 +1,7 @@
 
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator\")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator\FEM Interface Windows/")
 close all
 clear all
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
 
 %% Generate an arrangement with 2 inclusions, with sizes ranging from 10 pixels to 40 pixels such that they do not touch
@@ -114,11 +113,7 @@ title("Lateral Strain", "FontSize",20)
 
 speed_factor = 100;
 
-if (~ispc)
-    addpath("FIELD II Linux/")
-else
-    addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FIELD II Windows/")
-end
+
 
 field_init();
 
@@ -137,7 +132,6 @@ transducer.N_active=64;             %  Number of active elements
 transducer.focal_zones = [30:10:50]'/1000;
 transducer.transmit_focus = 50/1000;          %  Transmit focus
 
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator\Transducers")
 load("L12-3V.mat")
 
 D = 60/1000;
@@ -164,9 +158,9 @@ phantom = Phantom(phantom_positions, phantom_amplitudes);
 imageopts = ImageOpts((transducer.N_elements-transducer.N_active)/2, (transducer.element_width+transducer.kerf)*(transducer.N_elements-transducer.N_active),...
     40/1000, 40/1000,10/1000, 10e4,100);
 imageopts.decimation_factor = 2;
-iamgeopts.axial_FOV = 60/1000;
+imageopts.axial_FOV = 60/1000;
 imageopts.lateral_FOV = 1.2*(transducer.element_width+transducer.kerf)*(transducer.N_elements-transducer.N_active-1) + transducer.kerf;
-iamgeopts.slice_thickness = 10/1000;
+imageopts.slice_thickness = 10/1000;
 
 dispx = interp2(X,Y,axial_disp,phantom_positions(:,1),phantom_positions(:,3));
 dispy = interp2(X,Y,lateral_disp,phantom_positions(:,1),phantom_positions(:,3));
@@ -204,7 +198,6 @@ Frame2 = Frame2 ./ max(Frame2(:));
 
 %%
 
-addpath("C:\Users\MattC\OneDrive\Masters\Displacement Estimator Project\AM2D")
 
 params.probe.a_t = 1;
 params.probe.fc = 5;

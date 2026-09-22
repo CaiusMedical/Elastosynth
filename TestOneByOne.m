@@ -1,11 +1,7 @@
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FEM Interface Windows/")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator/FIELD II Windows")
-addpath("C:\Users\MattC\OneDrive\Elastosynth\Simulator\Transducers")
-addpath 'C:\Users\MattC\OneDrive\Elastosynth\Simulator\Models'
 close all
 clear all
 clc
+root = ElastosynthSetup();   % adds Elastosynth Src, FEM interface, FIELD II, Transducers, Models
 
 %%
 
@@ -13,7 +9,8 @@ n_phantoms = 10;
 
 resolution = [256 256];
 
-parameter_table = GeneratePhantomParameterTable(n_phantoms,[1,2],[5,1,10],[1,5],0,0,0,1);
+seed = 1;
+parameter_table = GeneratePhantomParameterTable(n_phantoms,[1,2],[5,1,10],[1,5],0,0,0,1, seed);
 size_params = [80,10];
 YM_params = [1.5, 5,3000];
 het_params = [1, 5, 1000];
@@ -30,11 +27,10 @@ parameter_table.generation_type = datasample(Generation_Types,n_phantoms)';
 
 %% Randomize the transducers
 
-addpath("F:\Jonah Data")
 
 load("transducer_list.mat")
 
-parameter_table.transducer_file = datasample(transducer_list, n_phantoms)';
+parameter_table.transducer_file = fullfile(root, "Transducers", datasample(transducer_list, n_phantoms)');
 
 % % load the old table
 % 
@@ -54,4 +50,5 @@ boundary_conditions.bottom_lateral = zeros(1, resolution(2) + 1);
 
 %% Generate the RF
 
-GenerateRFOneByOne(parameter_table, boundary_conditions, procedural_parameters, "F:\Jonah Data", 100)
+if ~exist("Outputs", "dir"), mkdir("Outputs"); end
+GenerateRFOneByOne(parameter_table, boundary_conditions, procedural_parameters, "Outputs", 100)
