@@ -62,3 +62,68 @@ If you use Elastosynth, please cite:
 > M. Caius, Z. Wang, A. Samani, "Elastosynth – An open-source software package for the generation of realistic in-silico RF data for ultrasound elastography", *Sensors* (under review).
 
 Archived releases: see the GitHub *Releases* page; each tagged version is deposited on Zenodo with a DOI.
+
+## Contributing
+
+Contributions to Elastosynth are welcome. The preferred workflow is to **fork the repository, make and test your changes in your own fork, and then submit those changes back upstream through a pull request**.
+
+Useful contributions include:
+
+* Bug fixes and performance improvements.
+* New phantom-generation methods, anatomical models, or material distributions.
+* Improvements to the finite element solver or MATLAB/C++ interface.
+* Additional FIELD II acquisition configurations, transducers, or RF-generation methods.
+* Support for additional operating systems or MATLAB releases.
+* Validation studies, benchmarks, and reproducibility tests.
+* Documentation, examples, and usability improvements.
+
+### Contribution workflow
+
+1. **Fork the Elastosynth repository** to your own GitHub account.
+2. **Clone your fork** locally.
+3. Create a new branch for the work, for example:
+   `feature/new-phantom-model` or `fix/fem-boundary-condition`.
+4. Make your changes in that branch.
+5. Run the relevant Elastosynth tests and confirm that the existing functionality still works.
+6. Push the completed branch to your fork.
+7. Open a **pull request from your fork back to the main Elastosynth repository**.
+8. In the pull request, briefly explain:
+
+   * what was changed;
+   * why the change is useful;
+   * how it was tested; and
+   * whether it changes numerical results, generated datasets, or reproducibility.
+9. Address any review comments, then update the pull request by pushing additional commits to the same branch.
+
+Please do not maintain useful fixes or extensions only in a private or separate fork where they can reasonably be contributed back to the project. Where possible, improvements should be **upstreamed to the main Elastosynth repository** so that other researchers can use, test, and build on them.
+
+For substantial changes, opening a GitHub issue before implementation is encouraged so that the proposed approach can be discussed before significant work is done.
+
+### Reproducibility requirements
+
+Changes affecting stochastic generation must preserve the existing reproducibility framework. Random behaviour should be derived from the Elastosynth seed mechanism rather than introducing independent uncontrolled random-number generators.
+
+If a change modifies generated phantoms, FE results, RF data, or numerical behaviour, please document the expected difference and provide a small validation example where practical.
+
+### Reporting issues
+
+When reporting a bug, please include:
+
+* Operating system.
+* MATLAB version.
+* Relevant MATLAB toolbox versions.
+* Elastosynth release or Git commit.
+* The script or function being run.
+* The complete error message and stack trace.
+* A minimal example or parameter set that reproduces the issue, where possible.
+
+For reproducibility-related issues, please also include the relevant master seed or `phantom_seed` and the corresponding parameter-table row.
+
+### Research contributions
+
+If Elastosynth is extended as part of a research project, we strongly encourage researchers to upstream generally useful additions rather than maintaining them only as laboratory-specific modifications.
+
+Examples include new tissue models, tumour models, FE formulations, transducer definitions, simulation settings, validation scripts, and performance improvements.
+
+Contributors retain copyright to their contributions. By submitting code to the project, you agree that it may be distributed under the project's LGPL-2.1 license. Contributions involving FIELD II or other third-party components must also comply with the licensing terms of those dependencies.
+
